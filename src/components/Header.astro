@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import logoNoir from '@/assets/brand/logo-noir.png';
+import Icon from './Icon.astro';
+import { nav, site } from '@/data/site';
+
+const current = Astro.url.pathname.replace(/\.html$/, '').replace(/\/(index)?$/, '') || '/';
+const isCurrent = (href: string) => (href === '/' ? current === '/' : current.startsWith(href));
+const phone = site.phones[0];
+---
+
+<header
+  class="sticky top-0 z-50 border-b-2 border-ocre bg-gris/92 backdrop-blur-md backdrop-saturate-140 [view-transition-name:site-header]"
+>
+  <div class="container flex min-h-19 items-center justify-between gap-6">
+    <a
+      href="/"
+      class="block py-1.5 leading-0 transition-transform duration-300 ease-spring hover:scale-103 hover:-rotate-2"
+      aria-label={`${site.name}, retour à l'accueil`}
+    >
+      <Image
+        src={logoNoir}
+        alt=""
+        width={124}
+        layout="fixed"
+        loading="eager"
+        decoding="async"
+        class="h-auto w-29 min-[1080px]:w-31"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-8 min-[1080px]:flex" aria-label="Navigation principale">
+      <ul class="flex gap-7">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class="relative inline-block py-3.5 text-[13px] font-extrabold tracking-widest text-noir uppercase after:absolute after:inset-x-0 after:bottom-2 after:h-0.5 after:origin-right after:scale-x-0 after:bg-rouge after:transition-transform after:duration-350 after:ease-out hover:after:origin-left hover:after:scale-x-100 aria-[current=page]:text-rouge aria-[current=page]:after:origin-left aria-[current=page]:after:scale-x-100"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={phone.href} class="btn btn-rouge btn-sm">
+        <Icon name="phone" size={17} />
+        Commander
+      </a>
+    </nav>
+
+    <button
+      class="inline-flex size-12 cursor-pointer items-center justify-center rounded-full border-2 border-noir text-noir min-[1080px]:hidden"
+      type="button"
+      popovertarget="mobile-nav"
+      aria-label="Ouvrir le menu"
+    >
+      <Icon name="menu" size={26} />
+    </button>
+  </div>
+
+  <!-- Menu mobile : popover natif, animé à l'ouverture et à la fermeture -->
+  <div
+    id="mobile-nav"
+    popover
+    class="group/nav fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none -translate-y-4 flex-col justify-between border-0 bg-rouge px-gutter pt-5 pb-8 text-blanc opacity-0 transition-[opacity,translate,overlay,display] duration-400 ease-out transition-discrete open:flex open:translate-y-0 open:opacity-100 starting:open:-translate-y-4 starting:open:opacity-0"
+  >
+    <div class="flex items-center justify-between">
+      <span class="eyebrow">Menu</span>
+      <button
+        class="inline-flex size-12 cursor-pointer items-center justify-center rounded-full border-2 border-blanc text-blanc"
+        type="button"
+        popovertarget="mobile-nav"
+        popovertargetaction="hide"
+        aria-label="Fermer le menu"
+      >
+        <Icon name="close" size={26} />
+      </button>
+    </div>
+    <nav aria-label="Navigation mobile">
+      <ul class="flex flex-col gap-1.5">
+        {
+          nav.map((item, i) => (
+            <li
+              style={`--i:${i}`}
+              class="group-open/nav:animate-[rise_0.5s_var(--ease-out)_both] group-open/nav:[animation-delay:calc(0.08s+var(--i)*0.06s)]"
+            >
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class="block py-1.5 font-title text-[clamp(40px,11vw,64px)] leading-[1.05] font-bold tracking-[0.02em] text-blanc uppercase aria-[current=page]:text-ocre"
+              >
+                {item.label}.
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="flex flex-col items-start gap-4.5">
+      <a href={phone.href} class="btn btn-blanc">
+        <Icon name="phone" size={18} />
+        Appeler · {phone.label}
+      </a>
+      <p class="script">{site.motto}</p>
+    </div>
+  </div>
+</header>

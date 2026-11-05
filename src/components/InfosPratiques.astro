@@ -1,0 +1,78 @@
+---
+import Icon from './Icon.astro';
+import MapEmbed from './MapEmbed.astro';
+import { site, formatTime } from '@/data/site';
+
+interface Props {
+  heading?: 'h1' | 'h2';
+  title?: string;
+}
+
+const { heading = 'h2', title = 'Infos pratiques.' } = Astro.props;
+const Heading = heading;
+const link = 'font-bold text-noir underline underline-offset-3';
+---
+
+<div class="flex flex-wrap gap-6">
+  <div
+    class="reveal flex min-w-0 flex-[1_1_440px] flex-col gap-6.5 bg-ocre px-[clamp(24px,4vw,44px)] py-[clamp(32px,5vw,48px)] text-noir"
+  >
+    <div>
+      <p class="eyebrow">Passe nous voir</p>
+      <div class="filet reveal-filet bg-noir" aria-hidden="true"></div>
+      <Heading class="title-lg">{title}</Heading>
+    </div>
+
+    <ul class="flex flex-col gap-4.5">
+      <li class="flex items-start gap-3.5">
+        <Icon name="pin" size={22} class="mt-0.75 flex-none" />
+        <address class="not-italic">
+          {site.address.street}<br />
+          {site.address.postalCode} {site.address.city}, {site.address.region}
+        </address>
+      </li>
+      <li class="flex items-start gap-3.5">
+        <Icon name="clock" size={22} class="mt-0.75 flex-none" />
+        <span>
+          <strong>{site.hours.daysLabel}</strong><br />
+          {site.hours.slots.map((slot, i) => (
+            <>
+              {i > 0 && <br />}
+              {slot.label} : {formatTime(slot.opens)} – {formatTime(slot.closes)}
+            </>
+          ))}
+        </span>
+      </li>
+      <li class="flex items-start gap-3.5">
+        <Icon name="phone" size={22} class="mt-0.75 flex-none" />
+        <span>
+          {site.phones.map((p, i) => (
+            <>
+              {i > 0 && <br />}
+              <a href={p.href} class={link}>{p.label}</a>
+            </>
+          ))}
+        </span>
+      </li>
+      <li class="flex items-start gap-3.5">
+        <Icon name="mail" size={22} class="mt-0.75 flex-none" />
+        <a href={`mailto:${site.email}`} class:list={[link, 'wrap-anywhere']}>{site.email}</a>
+      </li>
+    </ul>
+
+    <div class="flex flex-wrap gap-3">
+      <a href={site.phones[0].href} class="btn btn-rouge">
+        <Icon name="phone" size={18} />
+        Appeler pour commander
+      </a>
+      <a href={site.maps.directions} class="btn btn-outline" target="_blank" rel="noopener">
+        Itinéraire
+        <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </div>
+
+  <div class="reveal min-w-0 flex-[1_1_440px] *:h-full" style="--i:1">
+    <MapEmbed />
+  </div>
+</div>

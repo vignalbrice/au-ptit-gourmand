@@ -1,0 +1,112 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import MenuCategory from '@/components/MenuCategory.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { menu } from '@/data/menu';
+import { site } from '@/data/site';
+import { photos } from '@/data/photos';
+import { Picture } from 'astro:assets';
+
+const sandwiches = menu.filter((c) => ['bokits', 'agoulous', 'paninis', 'complet'].includes(c.id));
+const crepes = menu.filter((c) => ['crepes-salees', 'crepes-sucrees'].includes(c.id));
+const douceurs = menu.filter((c) => ['desserts', 'soupes'].includes(c.id));
+
+// Classes partagées
+const chip =
+  'inline-flex min-h-11 items-center rounded-full border-2 border-noir px-4.5 text-[13px] font-extrabold tracking-[0.06em] whitespace-nowrap text-noir uppercase transition-colors duration-200 hover:bg-noir hover:text-blanc';
+const groupTitle =
+  'reveal mb-9 border-b-2 border-noir pb-3.5 font-title text-[clamp(32px,4vw,48px)] leading-[1.05] font-bold tracking-[0.02em] text-noir uppercase';
+const grid = 'grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-start gap-x-18 gap-y-12';
+const entracte =
+  'reveal mx-auto my-20 flex max-w-160 flex-col items-center gap-2.5 border-y-2 border-noir px-2 py-9 text-center';
+---
+
+<BaseLayout
+  title="Menu : bokits, agoulous, crêpes et desserts"
+  description="Le menu d'Au P'tit Gourmand à Capesterre-Belle-Eau : bokits non gras, agoulous, paninis, crêpes salées et sucrées, desserts maison et soupe du samedi. Prix TTC."
+  crumb="Menu"
+>
+  <PageHero eyebrow="Menu" title="Le menu." lead="Tout est préparé sur place, à la minute. Les prix des sandwichs varient selon la garniture." />
+
+  <nav class="sticky top-19.5 z-40 border-b-2 border-noir bg-gris" aria-label="Catégories du menu">
+    <div class="container">
+      <ul
+        class="flex snap-x snap-proximity gap-2 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {menu.map((c) => (<li class="snap-start"><a href={`#${c.id}`} class={chip}>{c.title}</a></li>))}
+        <li class="snap-start"><a href="#assiettes" class={chip}>Assiettes du jour</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="bg-ocre py-section">
+    <div class="container">
+      <h2 class={groupTitle}>Bokits, agoulous &amp; paninis.</h2>
+      <div class={grid}>
+        {sandwiches.map((c, i) => <MenuCategory category={c} index={i} />)}
+      </div>
+
+      <div class={entracte}>
+        <p class="title-md">{site.name}</p>
+        <p class="script">{site.motto}</p>
+        <p>Notre bokit est cuit pour rester léger, sans excès de gras. Toutes nos garnitures sont préparées sur place.</p>
+      </div>
+
+      <h2 class={groupTitle}>Crêpes.</h2>
+      <div class={grid}>
+        {crepes.map((c, i) => <MenuCategory category={c} index={i} />)}
+      </div>
+
+      <div class={entracte}>
+        <p class="title-md">Le samedi</p>
+        <p class="script">Une soupe maison t'attend.</p>
+        <p>La recette change chaque semaine. Demande celle du jour au comptoir.</p>
+      </div>
+
+      <h2 class={groupTitle}>Desserts &amp; soupes.</h2>
+      <div class={grid}>
+        {douceurs.map((c, i) => <MenuCategory category={c} index={i} />)}
+      </div>
+
+      <p class="reveal mt-14 text-[13px] font-extrabold tracking-widest uppercase">Tous nos prix sont affichés TTC.</p>
+    </div>
+  </section>
+
+  <section class="bg-blanc py-section" id="assiettes">
+    <div class="container">
+      <div class="mb-[clamp(32px,5vw,52px)] flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+        <div class="reveal">
+          <p class="eyebrow text-rouge">Selon les jours</p>
+          <div class="filet reveal-filet bg-ocre" aria-hidden="true"></div>
+          <h2 class="title-lg">Les assiettes du jour.</h2>
+        </div>
+        <p class="reveal max-w-105 text-muted" style="--i:1">
+          L'équipe prépare aussi des assiettes complètes, faites maison. Demande au comptoir ce qui est au menu
+          aujourd'hui.
+        </p>
+      </div>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-6">
+        {
+          [photos.assiettePoulet, photos.assietteViande].map((photo, i) => (
+            <figure class="group/plate reveal-zoom flex flex-col gap-2.5" style={`--i:${i}`}>
+              <div class="aspect-4/5 overflow-hidden">
+                <Picture
+                  src={photo.src}
+                  alt={photo.alt}
+                  formats={['avif', 'webp']}
+                  widths={[420, 640, 900]}
+                  sizes="(min-width: 980px) 560px, 100vw"
+                  class="size-full object-cover object-[center_60%] transition-transform duration-800 ease-out group-hover/plate:scale-104"
+                />
+              </div>
+              <figcaption class="text-[14px] text-muted">{photo.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

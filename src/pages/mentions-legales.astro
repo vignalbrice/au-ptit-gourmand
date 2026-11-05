@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import { site, fullAddress } from '@/data/site';
+---
+
+<BaseLayout title="Mentions légales" crumb="Mentions légales" noindex>
+  <PageHero eyebrow="Mentions légales" title="Mentions légales." />
+
+  <section class="py-section">
+    <div
+      class="container flex max-w-195 flex-col gap-4 [&_a]:text-rouge [&_a]:underline [&_a]:underline-offset-3 [&_a:hover]:text-rouge-fonce [&_h2]:mt-5 [&_h2]:text-rouge"
+    >
+      <!--
+        Source : registre du commerce (societe.com, novembre 2026).
+        À COMPLÉTER : remplace chaque [crochet] restant (directeur de la publication, hébergeur).
+      -->
+      <h2 class="title-md">Éditeur du site</h2>
+      <p>
+        {site.name}, société par actions simplifiée (SAS) au capital de 3&nbsp;000&nbsp;€<br />
+        Siège social : {fullAddress}, {site.address.region}<br />
+        RCS Basse-Terre 830 684 635 · SIRET : 830 684 635 00022<br />
+        N° de TVA intracommunautaire : FR48830684635<br />
+        Téléphone : {site.phones[0].label} · E-mail : <a href={`mailto:${site.email}`}>{site.email}</a><br />
+        Directeur de la publication : [Prénom Nom], président de la société
+      </p>
+
+      <h2 class="title-md">Hébergement</h2>
+      <p>[Nom de l'hébergeur], [adresse de l'hébergeur], [téléphone de l'hébergeur].</p>
+
+      <h2 class="title-md">Propriété intellectuelle</h2>
+      <p>
+        Le logo, les textes et les photographies de ce site sont la propriété de {site.name}. Toute reproduction sans
+        autorisation écrite est interdite.
+      </p>
+
+      <h2 class="title-md">Données personnelles et cookies</h2>
+      <p>
+        Ce site ne dépose aucun cookie de mesure d'audience ni de publicité. La carte Google Maps n'est chargée que si
+        tu cliques sur « Afficher la carte » ; Google peut alors déposer ses propres cookies, régis par sa politique de
+        confidentialité.
+      </p>
+      <p>
+        Pour toute question sur tes données, écris-nous à <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

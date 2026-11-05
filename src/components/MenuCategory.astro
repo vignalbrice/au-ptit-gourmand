@@ -1,0 +1,77 @@
+---
+import { Picture } from 'astro:assets';
+import { formatPrice, formatRange, type MenuCategory } from '@/data/menu';
+import { menuPhotos } from '@/data/photos';
+
+interface Props {
+  category: MenuCategory;
+  /** Affichage compact (accueil) : noms en ligne ; complet (page menu) : liste avec prix. */
+  variant?: 'compact' | 'full';
+  index?: number;
+}
+
+const { category, variant = 'full', index = 0 } = Astro.props;
+const hasPrices = category.items.some((i) => i.price !== undefined);
+const photo = variant === 'full' ? menuPhotos[category.id] : undefined;
+
+const dots = 'min-w-5 flex-1 -translate-y-1.25 border-dotted border-noir';
+const price = 'font-title font-bold whitespace-nowrap';
+---
+
+<article
+  class="group/category reveal flex scroll-mt-37.5 flex-col gap-3"
+  id={variant === 'full' ? category.id : undefined}
+  style={`--i:${index % 2}`}
+>
+  {
+    photo && (
+      <div class="mb-2.5 aspect-16/10 overflow-hidden border-2 border-noir">
+        <Picture
+          src={photo.src}
+          alt={photo.alt}
+          formats={['avif', 'webp']}
+          widths={[420, 640, 900]}
+          sizes="(min-width: 980px) 540px, 100vw"
+          class="size-full object-cover transition-transform duration-800 ease-out group-hover/category:scale-105"
+          style={photo.position ? `object-position: ${photo.position}` : undefined}
+        />
+      </div>
+    )
+  }
+  <header class="flex items-baseline gap-3">
+    <h3 class="title-md text-noir">{category.title}</h3>
+    {category.range && (
+      <>
+        <span class:list={[dots, 'border-b-3']} aria-hidden="true"></span>
+        <span class:list={[price, 'text-[clamp(20px,2.2vw,26px)]']}>{formatRange(category.range)}</span>
+      </>
+    )}
+  </header>
+
+  {category.note && <p class="font-bold">{category.note}</p>}
+
+  {
+    variant === 'full' && hasPrices ? (
+      <ul class="flex flex-col gap-1">
+        {category.items.map((item) => (
+          <li class="flex items-baseline gap-3 py-1.5 font-bold transition-transform duration-250 ease-out hover:translate-x-1">
+            <span>{item.name}</span>
+            <span class:list={[dots, 'border-b-2 opacity-55']} aria-hidden="true" />
+            {item.price !== undefined && <span class:list={[price, 'text-[20px]']}>{formatPrice(item.price)}</span>}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      category.items.length > 0 && (
+        <p class="leading-[1.85] font-bold">
+          {category.items.map((item, i) => (
+            <>
+              {i > 0 && <span class="text-rouge" aria-hidden="true"> · </span>}
+              <span>{item.name}</span>
+            </>
+          ))}
+        </p>
+      )
+    )
+  }
+</article>

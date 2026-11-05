@@ -1,0 +1,23 @@
+# build
+dist/
+.astro/
+
+# dépendances
+node_modules/
+# le projet est géré avec pnpm (pnpm-lock.yaml) : pas de verrou npm
+package-lock.json
+
+# logs
+npm-debug.log*
+
+# environnement
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# éditeurs
+.vscode/*
+!.vscode/extensions.json
+.idea/

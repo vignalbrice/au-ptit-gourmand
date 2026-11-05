@@ -1,0 +1,186 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { menu, formatRange } from '@/data/menu';
+import { photos } from '@/data/photos';
+import { site } from '@/data/site';
+
+const cover = photos.hero.src;
+
+const bokits = menu.find((c) => c.id === 'bokits')!;
+const agoulous = menu.find((c) => c.id === 'agoulous')!;
+const complet = menu.find((c) => c.id === 'complet')!;
+
+// Classes partagées
+const split =
+  'container grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-[clamp(40px,6vw,80px)]';
+const media = 'reveal-zoom relative aspect-square overflow-hidden';
+const badge =
+  'absolute bottom-4 left-4 rounded-full bg-ocre px-4 py-2.5 text-[13px] font-extrabold tracking-widest text-noir uppercase';
+const text = 'flex flex-col gap-4';
+const foot = 'reveal mt-3 flex flex-wrap items-center gap-x-7 gap-y-4';
+const price = 'font-title text-[32px] font-bold';
+const duoPhoto = 'aspect-3/4 size-full object-cover object-[center_60%]';
+const promise = 'reveal flex flex-col gap-2.5 border-t-2 border-ocre pt-5.5';
+const num = 'font-title text-[40px] leading-none font-bold text-rouge';
+---
+
+<BaseLayout
+  title="Nos spécialités : bokit non gras et agoulou"
+  description="Le bokit non gras et l'agoulou, les deux spécialités antillaises d'Au P'tit Gourmand à Capesterre-Belle-Eau, préparées à la minute avec des produits frais."
+  crumb="Nos spécialités"
+>
+  <PageHero
+    eyebrow="Nos spécialités"
+    title="Deux spécialités, une signature."
+    lead="Des recettes antillaises, du fait maison et des produits frais. Voici ce qui fait venir nos gourmands."
+  />
+
+  <!-- BOKIT -->
+  <section id="bokit" class="py-section">
+    <div class={split}>
+      <div class={media}>
+        <Picture
+          src={cover}
+          alt="Deux bokits non gras garnis de viande, salade, tomate et oignon rouge, sur une planche en bois"
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 960px) 560px, 100vw"
+          loading="eager"
+          class="size-full object-cover [view-transition-name:bokit-photo]"
+        />
+        <span class={badge}>Spécialité n°1</span>
+      </div>
+      <div class={text}>
+        <p class="eyebrow reveal text-rouge">La spécialité de la maison</p>
+        <div class="filet reveal-filet m-0 bg-ocre" aria-hidden="true"></div>
+        <h2 class="title-lg reveal">Le bokit non gras.</h2>
+        <p class="script reveal">Léger, croustillant, généreux.</p>
+        <p class="reveal">
+          Bien plus qu'un sandwich : une vraie expérience antillaise. Notre pâte est préparée sur place et cuite pour
+          rester légère, sans excès de gras. Croustillant dehors, moelleux dedans.
+        </p>
+        <p class="reveal">
+          On le garnit à la minute, avec des ingrédients frais : jambon, saucisse, steak, œuf jambon fromage,
+          rouscaille, agneau, chatrou ou version végétarienne.
+        </p>
+        <div class={foot}>
+          <span class:list={[price, 'text-rouge']}>{formatRange(bokits.range!)}</span>
+          <a href="/menu#bokits" class="btn btn-rouge">
+            Voir les bokits
+            <Icon name="arrow" size={18} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGOULOU -->
+  <section id="agoulou" class="bg-ocre py-section">
+    <div class={split}>
+      <div class:list={[media, 'min-[900px]:order-2']}>
+        <Picture
+          src={photos.agoulou.src}
+          alt={photos.agoulou.alt}
+          formats={['avif', 'webp']}
+          widths={[480, 720, 1080]}
+          sizes="(min-width: 960px) 560px, 100vw"
+          class="size-full object-cover object-[center_40%] [view-transition-name:agoulou-photo]"
+        />
+        <span class={badge}>Plus qu'un burger</span>
+      </div>
+      <div class={text}>
+        <p class="eyebrow reveal text-noir">L'autre star</p>
+        <div class="filet reveal-filet m-0 bg-noir" aria-hidden="true"></div>
+        <h2 class="title-lg reveal">L'agoulou.</h2>
+        <p class="script reveal">Grosses saveurs garanties.</p>
+        <p class="reveal">
+          Plus qu'un burger, une spécialité des Antilles. Pain doré, viande juteuse, fromage fondant et recettes
+          pleines de caractère.
+        </p>
+        <p class="reveal">
+          Du Simply au Must, en passant par Le Good, Le Best ou Le P'tit Gourmand : l'agoulou qui rassemble les
+          amateurs de bonne cuisine.
+        </p>
+        <div class={foot}>
+          <span class:list={[price, 'text-noir']}>{formatRange(agoulous.range!)}</span>
+          <a href="/menu#agoulous" class="btn btn-rouge">
+            Voir les agoulous
+            <Icon name="arrow" size={18} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASSIETTES DU JOUR -->
+  <section id="assiettes" class="py-section">
+    <div class={split}>
+      <div class="reveal-zoom relative grid grid-cols-2 gap-4">
+        <Picture
+          src={photos.assiettePoulet.src}
+          alt={photos.assiettePoulet.alt}
+          formats={['avif', 'webp']}
+          widths={[360, 540, 800]}
+          sizes="(min-width: 960px) 280px, 50vw"
+          class={duoPhoto}
+        />
+        <Picture
+          src={photos.assietteViande.src}
+          alt={photos.assietteViande.alt}
+          formats={['avif', 'webp']}
+          widths={[360, 540, 800]}
+          sizes="(min-width: 960px) 280px, 50vw"
+          class={duoPhoto}
+          pictureAttributes={{ class: 'translate-y-10' }}
+        />
+      </div>
+      <div class={text}>
+        <p class="eyebrow reveal text-rouge">Selon les jours</p>
+        <div class="filet reveal-filet m-0 bg-ocre" aria-hidden="true"></div>
+        <h2 class="title-lg reveal">Les assiettes du jour.</h2>
+        <p class="script reveal">Comme à la maison.</p>
+        <p class="reveal">
+          En plus des bokits et des agoulous, l'équipe prépare des assiettes complètes faites maison : poulet
+          grillé, viande en sauce, riz, crudités, avocat… La composition change selon les jours.
+        </p>
+        <div class={foot}>
+          <a href={site.phones[0].href} class="btn btn-rouge">
+            <Icon name="phone" size={18} />
+            Demander l'assiette du jour
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLET + ENGAGEMENTS -->
+  <section class="bg-blanc py-section">
+    <div class="container">
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-8">
+        <div class={promise} style="--i:0">
+          <span class={num}>01</span>
+          <h3 class="title-md">Fait maison</h3>
+          <p class="text-muted">Pâte, garnitures et desserts préparés sur place, chaque jour.</p>
+        </div>
+        <div class={promise} style="--i:1">
+          <span class={num}>02</span>
+          <h3 class="title-md">Produits locaux</h3>
+          <p class="text-muted">Des produits frais et de saison, comme le bœuf local ou le lambi.</p>
+        </div>
+        <div class={promise} style="--i:2">
+          <span class={num}>03</span>
+          <h3 class="title-md">Option complet</h3>
+          <p class="text-muted">
+            {complet.note} Saucisse, poulet, steak, rouscaille, thon ou bœuf, de {formatRange(complet.range!)}.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Envie d'y goûter ?" />
+</BaseLayout>

@@ -1,0 +1,94 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import MapEmbed from '@/components/MapEmbed.astro';
+import { site, fullAddress, formatTime } from '@/data/site';
+import { devanture } from '@/data/photos';
+import { Picture } from 'astro:assets';
+
+// Classes partagées
+const tile =
+  'reveal flex flex-col gap-3 border-t-4 border-ocre bg-blanc px-6.5 pt-7 pb-7.5 transition-transform duration-400 ease-out hover:-translate-y-1';
+const link = 'font-extrabold text-rouge underline underline-offset-3';
+---
+
+<BaseLayout
+  title="Contact, horaires et accès"
+  description={`Au P'tit Gourmand, ${fullAddress}. Ouvert ${site.hours.daysLabel.toLowerCase()}, ${site.hours.label}. Appelle le ${site.phones[0].label} pour commander.`}
+  crumb="Contact"
+>
+  <PageHero eyebrow="Contact" title="Passe nous voir." lead="Sur place ou à emporter. Appelle-nous pour commander, ta commande est préparée à la minute.">
+    <div class="mt-7 flex flex-wrap gap-3 motion-safe:animate-[rise_0.7s_0.25s_var(--ease-out)_both]">
+      <a href={site.phones[0].href} class="btn btn-blanc">
+        <Icon name="phone" size={18} />
+        {site.phones[0].label}
+      </a>
+      <a href={site.maps.directions} class="btn btn-outline-blanc" target="_blank" rel="noopener">
+        Itinéraire
+        <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </PageHero>
+
+  <section class="py-section">
+    <div class="container">
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-5">
+        <article class={tile} style="--i:0">
+          <Icon name="pin" size={28} class="text-rouge" />
+          <h2 class="title-md">Adresse</h2>
+          <address class="not-italic">
+            {site.address.street}<br />
+            {site.address.postalCode} {site.address.city}<br />
+            {site.address.region}
+          </address>
+          <a href={site.maps.directions} target="_blank" rel="noopener" class={link}>Lancer l'itinéraire</a>
+        </article>
+
+        <article class={tile} style="--i:1">
+          <Icon name="clock" size={28} class="text-rouge" />
+          <h2 class="title-md">Horaires</h2>
+          <p class="font-extrabold">{site.hours.daysLabel}</p>
+          <dl class="flex flex-col gap-1.5">
+            {site.hours.slots.map((slot) => (
+              <div class="flex justify-between gap-3 border-b-2 border-dotted border-ocre pb-1.5">
+                <dt class="font-extrabold">{slot.label}</dt>
+                <dd>{formatTime(slot.opens)} – {formatTime(slot.closes)}</dd>
+              </div>
+            ))}
+          </dl>
+        </article>
+
+        <article class={tile} style="--i:2">
+          <Icon name="phone" size={28} class="text-rouge" />
+          <h2 class="title-md">Téléphone</h2>
+          <ul>
+            {site.phones.map((p) => (<li><a href={p.href} class="font-title text-[26px] font-bold text-rouge">{p.label}</a></li>))}
+          </ul>
+        </article>
+
+        <article class={tile} style="--i:3">
+          <Icon name="mail" size={28} class="text-rouge" />
+          <h2 class="title-md">E-mail</h2>
+          <a href={`mailto:${site.email}`} class:list={[link, 'wrap-anywhere']}>{site.email}</a>
+        </article>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-5">
+        <figure class="reveal-zoom min-h-105 max-w-full flex-[1_1_300px] overflow-hidden">
+          <Picture
+            src={devanture.src}
+            alt={devanture.alt}
+            formats={['avif', 'webp']}
+            widths={[400, 600, 900]}
+            sizes="(min-width: 960px) 420px, 100vw"
+            class="size-full object-cover"
+          />
+        </figure>
+        <div class="reveal min-w-0 flex-[999_1_460px]" style="--i:1">
+          <MapEmbed tall />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

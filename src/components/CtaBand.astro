@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import { site } from '@/data/site';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Une petite faim ?',
+  text = 'Appelle-nous pour commander, ton bokit est préparé à la minute.',
+} = Astro.props;
+---
+
+<section class="border-t-2 border-ocre bg-rouge text-blanc">
+  <div
+    class="container reveal flex flex-wrap items-center justify-between gap-x-12 gap-y-7 py-[clamp(56px,8vw,88px)]"
+  >
+    <div>
+      <p class="script mb-1.5">{site.motto}</p>
+      <h2 class="title-lg">{title}</h2>
+      <p class="lead mt-3">{text}</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <a href={site.phones[0].href} class="btn btn-blanc">
+        <Icon name="phone" size={18} />
+        {site.phones[0].label}
+      </a>
+      <a href="/menu" class="btn btn-outline-blanc">
+        Voir le menu
+        <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </div>
+</section>

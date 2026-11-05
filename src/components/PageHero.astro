@@ -1,0 +1,28 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}
+
+const { eyebrow, title, lead } = Astro.props;
+---
+
+<section class="overflow-hidden bg-rouge text-blanc">
+  <div class="container flex flex-col items-start pt-[clamp(56px,8vw,96px)] pb-[clamp(48px,7vw,80px)]">
+    <nav
+      aria-label="Fil d'Ariane"
+      class="flex gap-2.5 text-[13px] font-extrabold tracking-widest uppercase motion-safe:animate-[rise_0.7s_var(--ease-out)_both]"
+    >
+      <a href="/" class="text-blanc opacity-85 hover:opacity-100">Accueil</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{eyebrow}</span>
+    </nav>
+    <div class="filet bg-ocre motion-safe:animate-[grow-x_0.8s_0.15s_var(--ease-out)_both]" aria-hidden="true"></div>
+    <h1 class="title-xl [view-transition-name:page-title] motion-safe:animate-[rise_0.7s_0.05s_var(--ease-out)_both]">
+      {title}
+    </h1>
+    {lead && <p class="lead mt-5 motion-safe:animate-[rise_0.7s_0.15s_var(--ease-out)_both]">{lead}</p>}
+    <slot />
+  </div>
+</section>

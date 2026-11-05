@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import logoBlanc from '@/assets/brand/logo-blanc.png';
+import { nav, site, fullAddress } from '@/data/site';
+
+const socials = [
+  { label: 'Facebook', href: site.social.facebook },
+  { label: 'Instagram', href: site.social.instagram },
+  { label: 'TikTok', href: site.social.tiktok },
+].filter((s) => s.href);
+
+const year = new Date().getFullYear();
+const navLink = 'inline-block py-1.5 text-[13px] font-extrabold tracking-widest text-blanc uppercase hover:text-ocre';
+---
+
+<footer class="border-t-2 border-ocre bg-noir text-blanc">
+  <div class="container flex flex-wrap justify-between gap-10 pt-14 pb-9">
+    <div class="flex flex-col gap-3.5">
+      <Image
+        src={logoBlanc}
+        alt={`${site.name} — ${site.tagline}`}
+        width={190}
+        layout="fixed"
+        class="h-auto w-47.5"
+      />
+      <p class="script">{site.motto}</p>
+    </div>
+
+    <nav aria-label="Pied de page">
+      <ul class="flex flex-col gap-1">
+        {nav.map((item) => (<li><a href={item.href} class={navLink}>{item.label}</a></li>))}
+        <li><a href="/mentions-legales" class={navLink}>Mentions légales</a></li>
+      </ul>
+    </nav>
+
+    <div class="flex flex-col gap-1.5">
+      <p>{fullAddress}</p>
+      <p>
+        {site.phones.map((p, i) => (<>{i > 0 && ' · '}<a href={p.href} class="font-bold text-blanc hover:text-ocre">{p.label}</a></>))}
+      </p>
+      <p>{site.hours.daysLabel} · {site.hours.label}</p>
+      {
+        socials.length > 0 && (
+          <ul class="mt-3 flex flex-wrap gap-2.5">
+            {socials.map((s) => (
+              <li>
+                <a href={s.href} class="btn btn-outline-blanc btn-sm" rel="noopener" target="_blank">
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+  <div
+    class="container flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-[#333] pt-4.5 pb-7 text-[14px] text-[#c8c8c8]"
+  >
+    <span>© {year} {site.name}</span>
+    <span>Tous nos prix sont affichés TTC.</span>
+  </div>
+</footer>

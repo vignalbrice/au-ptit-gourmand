@@ -1,0 +1,66 @@
+---
+import Icon from './Icon.astro';
+import { site, fullAddress } from '@/data/site';
+
+interface Props {
+  tall?: boolean;
+}
+
+const { tall = false } = Astro.props;
+---
+
+<!--
+  Carte Google Maps en « façade » : l'iframe (≈ 1 Mo de JavaScript Google et des cookies tiers)
+  n'est chargée que si le visiteur la demande. Meilleurs Core Web Vitals et respect du RGPD.
+-->
+<map-embed
+  class:list={[
+    'group/map relative block overflow-hidden border-2 border-ocre bg-blanc',
+    tall ? 'min-h-130' : 'min-h-105',
+  ]}
+  data-src={site.maps.embed}
+>
+  <div
+    class="absolute inset-0 flex flex-col items-center justify-center gap-2.5 bg-[radial-gradient(circle_at_1px_1px,rgb(0_0_0/0.09)_1px,transparent_0)] bg-size-[18px_18px] p-7 text-center transition-opacity duration-400 group-[.is-loaded]/map:pointer-events-none group-[.is-loaded]/map:opacity-0"
+  >
+    <span class="mb-1.5 grid size-18 place-items-center rounded-full bg-rouge text-blanc motion-safe:animate-bob">
+      <Icon name="pin" size={34} />
+    </span>
+    <p class="title-md">{site.name} sur Google Maps</p>
+    <p class="mb-2 text-muted">{fullAddress}</p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <button type="button" class="btn btn-rouge btn-sm" data-load>
+        <Icon name="map" size={17} />
+        Afficher la carte
+      </button>
+      <a class="btn btn-outline btn-sm" href={site.maps.place} target="_blank" rel="noopener">
+        Ouvrir dans Maps
+      </a>
+    </div>
+    <p class="mt-1.5 text-[13px] text-muted">En affichant la carte, tu acceptes le dépôt de cookies par Google.</p>
+  </div>
+</map-embed>
+
+<script>
+  class MapEmbed extends HTMLElement {
+    connectedCallback() {
+      this.querySelector('[data-load]')?.addEventListener('click', () => this.load(), { once: true });
+    }
+
+    load() {
+      const iframe = document.createElement('iframe');
+      iframe.src = this.dataset.src ?? '';
+      iframe.title = "Carte Google Maps : Au P'tit Gourmand, Capesterre-Belle-Eau";
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      iframe.className = 'absolute inset-0 size-full border-0 animate-fade-in';
+      this.append(iframe);
+      // Masque la façade (variante group-[.is-loaded]/map ci-dessus)
+      this.classList.add('is-loaded');
+      iframe.focus();
+    }
+  }
+
+  customElements.define('map-embed', MapEmbed);
+</script>

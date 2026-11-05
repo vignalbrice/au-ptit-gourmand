@@ -1,0 +1,89 @@
+---
+import { Font } from 'astro:assets';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { site } from '@/data/site';
+import { restaurantSchema, breadcrumbSchema } from '@/lib/schema';
+import '@/styles/global.css';
+
+interface Props {
+  /** Titre de la page (sans le nom du restaurant). Absent sur l'accueil. */
+  title?: string;
+  description?: string;
+  /** Nom court pour le fil d'Ariane (données structurées). */
+  crumb?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description = site.description, crumb, image = '/og-image.jpg', noindex = false } = Astro.props;
+
+const fullTitle = title
+  ? `${title} | ${site.name}`
+  : `${site.name} · Bokits non gras et agoulous à Capesterre-Belle-Eau`;
+// Adresses propres : « /menu.html » → « /menu », « /index » → « / »
+const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/';
+const canonical = new URL(cleanPath, Astro.site);
+const ogImage = new URL(image, Astro.site);
+
+const isHome = cleanPath === '/';
+const jsonLd = [restaurantSchema()];
+if (!isHome && crumb) jsonLd.push(breadcrumbSchema(crumb, canonical.href));
+---
+
+<!doctype html>
+<html lang="fr" class="scroll-pt-24 scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta name="theme-color" content="#a7122a" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="restaurant" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="geo.region" content="GP" />
+    <meta name="geo.placename" content={site.address.city} />
+    <meta name="geo.position" content={`${site.geo.latitude};${site.geo.longitude}`} />
+
+    <Font cssVariable="--font-oswald" preload />
+    <Font cssVariable="--font-nunito" preload />
+    <Font cssVariable="--font-yellowtail" />
+
+    {jsonLd.map((data) => <script is:inline type="application/ld+json" set:html={JSON.stringify(data)} />)}
+
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-dvh flex-col bg-gris text-[17px] leading-[1.6] text-noir antialiased [text-rendering:optimizeLegibility]">
+    <a
+      href="#contenu"
+      class="absolute top-2 left-2 z-100 -translate-y-[160%] bg-noir px-4.5 py-3 font-extrabold text-blanc transition-transform duration-200 ease-out focus:translate-y-0"
+    >
+      Aller au contenu
+    </a>
+    <Header />
+    <main id="contenu" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

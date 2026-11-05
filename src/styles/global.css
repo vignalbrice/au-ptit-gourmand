@@ -1,0 +1,455 @@
+/* ==========================================================================
+   Au P'tit Gourmand — Tailwind CSS
+   Couleurs du dépliant · Oswald (titres) · Nunito Sans (texte) · Yellowtail (signature)
+
+   - @theme       : les jetons de marque (couleurs, polices, espacements, animations)
+                    → utilisables en classes : bg-ocre, text-rouge, font-title, py-section…
+   - @utility     : les briques du design system répétées partout (boutons, titres…)
+   - le reste se fait directement en classes Tailwind dans les composants.
+   ========================================================================== */
+
+/* Déclarée avant Tailwind : les styles d'images d'Astro (@layer astro.images)
+   restent sous les utilitaires, donc `h-full`, `object-cover`… s'appliquent bien. */
+@layer astro;
+
+@import 'tailwindcss';
+
+@theme {
+  /* Palette de marque (remplace la palette Tailwind par défaut) */
+  --color-*: initial;
+  --color-ocre: #d68802;
+  --color-rouge: #a7122a;
+  --color-rouge-fonce: #7a0d1f;
+  --color-gris: #e6e6e6;
+  --color-noir: #000;
+  --color-blanc: #fff;
+  --color-muted: #4a4a4a;
+
+  /* Polices auto-hébergées déclarées dans astro.config.mjs */
+  --font-sans: var(--font-nunito);
+  --font-title: var(--font-oswald);
+  --font-script: var(--font-yellowtail);
+
+  /* px-gutter, py-section… */
+  --spacing-gutter: clamp(16px, 4vw, 24px);
+  --spacing-section: clamp(64px, 9vw, 112px);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --animate-rise: rise 0.8s var(--ease-out) both;
+  --animate-ken-burns: ken-burns 2.4s var(--ease-out) both;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-cue: cue 1.8s ease-in-out infinite;
+  --animate-bob: bob 2.6s ease-in-out infinite;
+  --animate-wobble: wobble 2.4s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.5s ease both;
+}
+
+/* ---------- Base ---------- */
+
+@layer base {
+  :root {
+    color-scheme: light;
+    accent-color: var(--color-rouge);
+  }
+
+  html {
+    text-size-adjust: 100%;
+    hanging-punctuation: first last;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Une <picture> remplit son cadre : l'image en object-fit: cover s'y adapte. */
+  picture {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-rouge);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-ocre);
+    color: var(--color-noir);
+  }
+}
+
+/* ---------- Mise en page ---------- */
+
+@utility container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* ---------- Typographie de marque ---------- */
+
+/* Petit sur-titre en capitales. Couleur à préciser : text-rouge sur fond clair. */
+@utility eyebrow {
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Filet décoratif sous le sur-titre. Couleur à préciser : bg-ocre ou bg-noir. */
+@utility filet {
+  width: 72px;
+  height: 2px;
+  margin: 14px 0 18px;
+  transform-origin: left;
+}
+
+@utility title-xl {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: clamp(46px, 7vw, 96px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility title-lg {
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: clamp(36px, 4.6vw, 60px);
+  line-height: 1.04;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility title-md {
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: clamp(24px, 2.4vw, 30px);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(30px, 3.4vw, 40px);
+  line-height: 1.1;
+}
+
+@utility lead {
+  font-size: clamp(17px, 1.6vw, 19px);
+  max-width: 560px;
+}
+
+@utility pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 9999px;
+  background-color: var(--color-ocre);
+  color: var(--color-noir);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---------- Boutons : btn + une variante (btn-rouge, btn-blanc, btn-outline, btn-outline-blanc) ---------- */
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 26px;
+  border: 2px solid var(--btn-border, var(--btn-bg, var(--color-rouge)));
+  border-radius: 9999px;
+  background-color: var(--btn-bg, var(--color-rouge));
+  color: var(--btn-fg, var(--color-blanc));
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    translate 0.25s var(--ease-spring),
+    scale 0.25s var(--ease-spring),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    translate: 0 -2px;
+  }
+
+  &:active {
+    translate: none;
+    scale: 0.98;
+  }
+
+  & svg {
+    flex: none;
+    transition: translate 0.3s var(--ease-out);
+  }
+
+  &:hover svg.arrow {
+    translate: 4px 0;
+  }
+}
+
+@utility btn-rouge {
+  &:hover {
+    --btn-bg: var(--color-rouge-fonce);
+  }
+}
+
+@utility btn-blanc {
+  --btn-bg: var(--color-blanc);
+  --btn-fg: var(--color-rouge);
+
+  &:hover {
+    --btn-bg: var(--color-gris);
+    --btn-fg: var(--color-rouge-fonce);
+  }
+}
+
+@utility btn-outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-noir);
+  --btn-border: var(--color-noir);
+
+  &:hover {
+    --btn-bg: var(--color-noir);
+    --btn-fg: var(--color-blanc);
+  }
+}
+
+@utility btn-outline-blanc {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-blanc);
+  --btn-border: var(--color-blanc);
+
+  &:hover {
+    --btn-bg: var(--color-blanc);
+    --btn-fg: var(--color-noir);
+  }
+}
+
+@utility btn-sm {
+  min-height: 46px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+/* ---------- Animations ---------- */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes parallax {
+  to {
+    transform: translateY(18%);
+  }
+}
+
+@keyframes cue {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes wobble {
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Apparition au scroll, 100 % CSS (scroll-driven animations).
+   Décalage optionnel avec style="--i:1", "--i:2"…
+   Navigateurs sans support : le contenu reste simplement visible. */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: reveal;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 6%) entry calc(55% + var(--i, 0) * 6%);
+    }
+  }
+}
+
+@utility reveal-zoom {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: reveal-zoom;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 6%) entry calc(55% + var(--i, 0) * 6%);
+    }
+  }
+}
+
+@utility reveal-filet {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: grow-x;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 6%) entry calc(55% + var(--i, 0) * 6%);
+    }
+  }
+}
+
+/* Léger parallaxe d'une image au défilement de la page */
+@utility parallax {
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation-name: parallax;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100svh;
+    }
+  }
+}
+
+/* Transitions fluides entre les pages (View Transitions API, sans JavaScript). */
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+::view-transition-old(root) {
+  animation: vt-out 0.24s ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.46s var(--ease-out) both;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

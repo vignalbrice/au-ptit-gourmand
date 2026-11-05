@@ -1,0 +1,173 @@
+---
+import { Image, Picture } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import logoBlanc from '@/assets/brand/logo-blanc.png';
+import { manager, managerFirstName } from '@/data/about';
+import { comptoir, lieu } from '@/data/photos';
+import { site, formatTime } from '@/data/site';
+
+const who = managerFirstName || 'Notre gérante';
+const heading = manager.name ? `${manager.name}.` : 'Notre gérante.';
+const since = manager.since ? ` depuis ${manager.since}` : '';
+const salleComptoir = lieu[0];
+
+// Classes partagées
+const split =
+  'container grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-[clamp(40px,6vw,80px)]';
+const text = 'flex flex-col gap-4';
+const value = 'reveal flex flex-col gap-2.5 border-t-2 border-noir pt-5.5';
+const num = 'font-title text-[40px] leading-none font-bold text-rouge';
+---
+
+<BaseLayout
+  title="Qui sommes-nous : la gérante et l'équipe"
+  description={`Découvre l'histoire d'Au P'tit Gourmand, le snack antillais de Capesterre-Belle-Eau : sa gérante, son équipe et sa cuisine faite maison, du bokit non gras à l'agoulou.`}
+  crumb="Qui sommes-nous"
+>
+  <PageHero
+    eyebrow="Qui sommes-nous"
+    title="Qui sommes-nous."
+    lead="Une gérante passionnée, une équipe aux petits soins et une cuisine antillaise faite maison, au cœur de Capesterre-Belle-Eau."
+  />
+
+  <!-- LA GÉRANTE -->
+  <section id="gerante" class="py-section">
+    <div class={split}>
+      <figure class="reveal-zoom relative aspect-4/5 overflow-hidden">
+        {
+          manager.photo ? (
+            <Picture
+              src={manager.photo}
+              alt={`${manager.name || 'La gérante'}, ${manager.role.toLowerCase()} d'${site.name}`}
+              formats={['avif', 'webp']}
+              widths={[420, 640, 900]}
+              sizes="(min-width: 960px) 560px, 100vw"
+              loading="eager"
+              class="size-full object-cover"
+            />
+          ) : (
+            <div class="flex size-full flex-col items-center justify-center gap-5 bg-rouge p-8 text-center text-blanc">
+              <Image src={logoBlanc} alt="" width={300} layout="fixed" loading="eager" class="h-auto w-[min(300px,70%)]" />
+              <span class="script text-ocre">{site.motto}</span>
+            </div>
+          )
+        }
+        <figcaption class="absolute bottom-4 left-4 rounded-full bg-ocre px-4 py-2.5 text-[13px] font-extrabold tracking-widest text-noir uppercase">
+          {manager.role}
+        </figcaption>
+      </figure>
+
+      <div class={text}>
+        <p class="eyebrow reveal text-rouge">La gérante</p>
+        <div class="filet reveal-filet bg-ocre" aria-hidden="true"></div>
+        <h2 class="title-lg reveal">{heading}</h2>
+        <p class="script reveal">Le goût du fait maison.</p>
+        <p class="reveal">
+          {who} est à la tête d'{site.name}{since}, le snack antillais de l'avenue Paul-Lacavé, à
+          Capesterre-Belle-Eau. Son idée : servir une street food généreuse, faite maison, et plus légère.
+        </p>
+        <p class="reveal">
+          Sous sa direction, le bokit non gras est devenu la signature de la maison : une pâte préparée sur place,
+          cuite pour rester légère, et garnie à la minute. Autour de lui, une carte qui fait voyager les papilles :
+          agoulous, paninis, crêpes et desserts maison.
+        </p>
+        <p class="reveal">
+          Au quotidien, elle mise sur des produits locaux, frais et de saison, et sur un accueil chaleureux, que tu
+          viennes manger sur place ou emporter ta commande.
+        </p>
+        {
+          manager.quote && (
+            <blockquote class="reveal mt-2 border-l-0 border-t-2 border-ocre pt-5">
+              <p class="font-title text-[clamp(24px,2.6vw,32px)] leading-tight font-semibold tracking-[0.01em] uppercase">
+                « {manager.quote} »
+              </p>
+              <footer class="mt-2 text-muted">— {manager.name || 'La gérante'}</footer>
+            </blockquote>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- NOS VALEURS -->
+  <section class="bg-ocre py-section">
+    <div class="container">
+      <div class="mb-[clamp(32px,5vw,52px)]">
+        <p class="eyebrow reveal text-noir">Ce qui nous guide</p>
+        <div class="filet reveal-filet bg-noir" aria-hidden="true"></div>
+        <h2 class="title-lg reveal">Nos engagements.</h2>
+      </div>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-8">
+        <div class={value} style="--i:0">
+          <span class={num}>01</span>
+          <h3 class="title-md">Fait maison</h3>
+          <p>La pâte des bokits, les garnitures et les desserts sont préparés sur place, chaque jour.</p>
+        </div>
+        <div class={value} style="--i:1">
+          <span class={num}>02</span>
+          <h3 class="title-md">Produits locaux</h3>
+          <p>Des produits frais et de saison, comme le bœuf local ou le lambi.</p>
+        </div>
+        <div class={value} style="--i:2">
+          <span class={num}>03</span>
+          <h3 class="title-md">Plus léger</h3>
+          <p>Un bokit cuit pour rester léger, sans excès de gras, sans rien enlever au goût.</p>
+        </div>
+        <div class={value} style="--i:3">
+          <span class={num}>04</span>
+          <h3 class="title-md">Accueil chaleureux</h3>
+          <p>Seul, en famille ou entre amis, sur place ou à emporter : tu es le bienvenu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- L'ÉQUIPE -->
+  <section class="py-section">
+    <div class={split}>
+      <div class="reveal-zoom grid grid-cols-2 gap-4">
+        <Picture
+          src={comptoir.src}
+          alt={comptoir.alt}
+          formats={['avif', 'webp']}
+          widths={[360, 540, 800]}
+          sizes="(min-width: 960px) 280px, 50vw"
+          class="aspect-3/4 size-full object-cover"
+        />
+        <Picture
+          src={salleComptoir.src}
+          alt={salleComptoir.alt}
+          formats={['avif', 'webp']}
+          widths={[360, 540, 800]}
+          sizes="(min-width: 960px) 280px, 50vw"
+          class="aspect-3/4 size-full object-cover"
+          pictureAttributes={{ class: 'translate-y-10' }}
+        />
+      </div>
+      <div class={text}>
+        <p class="eyebrow reveal text-rouge">L'équipe</p>
+        <div class="filet reveal-filet bg-ocre" aria-hidden="true"></div>
+        <h2 class="title-lg reveal">Une équipe aux petits soins.</h2>
+        <p class="reveal">
+          Au comptoir comme en cuisine, l'équipe prépare chaque commande à la minute. Un bokit à emporter, une assiette
+          du jour ou une crêpe au goûter : on prend le temps de bien faire.
+        </p>
+        <p class="reveal">
+          {`On t'accueille ${site.hours.daysLabel.toLowerCase()}, ${site.hours.slots.map((s) => `de ${formatTime(s.opens)} à ${formatTime(s.closes)}`).join(' et ')}.`}
+        </p>
+        <div class="reveal mt-3 flex flex-wrap gap-3">
+          <a href="/contact" class="btn btn-rouge">
+            Nous rendre visite
+            <Icon name="arrow" size={18} />
+          </a>
+          <a href="/menu" class="btn btn-outline">Voir le menu</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

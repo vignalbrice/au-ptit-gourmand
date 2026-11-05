@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout title="Page introuvable" noindex>
+  <section class="flex min-h-[70svh] items-center bg-rouge text-blanc">
+    <div class="container flex flex-col items-start gap-4 py-20">
+      <p
+        class="origin-bottom-left font-title text-[clamp(96px,18vw,200px)] leading-[0.9] font-bold text-ocre motion-safe:animate-wobble"
+        aria-hidden="true"
+      >
+        404
+      </p>
+      <h1 class="title-lg">Cette page a été mangée.</h1>
+      <p class="script">{site.motto}</p>
+      <p class="lead">La page que tu cherches n'existe pas ou a changé d'adresse. Le menu, lui, est toujours là.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/" class="btn btn-blanc">Retour à l'accueil</a>
+        <a href="/menu" class="btn btn-outline-blanc">
+          Voir le menu
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

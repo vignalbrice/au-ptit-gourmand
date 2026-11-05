@@ -1,0 +1,348 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import MenuCategory from '@/components/MenuCategory.astro';
+import InfosPratiques from '@/components/InfosPratiques.astro';
+import { menu, formatRange } from '@/data/menu';
+import { site } from '@/data/site';
+
+import { photos, lieu, comptoir, emporter } from '@/data/photos';
+
+const cover = photos.hero.src;
+const teaser = menu.filter((c) => ['bokits', 'agoulous', 'paninis', 'complet'].includes(c.id));
+const bokits = menu.find((c) => c.id === 'bokits')!;
+const agoulous = menu.find((c) => c.id === 'agoulous')!;
+
+const gourmandises = [
+  { photo: photos.crepesSucrees, label: 'Crêpes sucrées', href: '/menu#crepes-sucrees' },
+  { photo: photos.paninis, label: 'Paninis', href: '/menu#paninis' },
+  { photo: photos.crepesSalees, label: 'Crêpes salées', href: '/menu#crepes-salees' },
+  { photo: photos.desserts, label: 'Desserts', href: '/menu#desserts' },
+];
+
+// Classes partagées
+const sectionHead = 'mb-[clamp(32px,5vw,52px)] flex flex-wrap items-end justify-between gap-x-8 gap-y-4';
+const card =
+  'group/card reveal flex flex-col border-2 border-ocre bg-blanc text-noir transition-[translate,border-color] duration-400 ease-out hover:-translate-y-1.5 hover:border-rouge';
+const cardImg = 'size-full object-cover transition-transform duration-800 ease-out group-hover/card:scale-106';
+const cardPrice = 'font-title text-[28px] font-bold text-rouge';
+const cardMore = 'inline-flex items-center gap-2 text-[13px] font-extrabold tracking-[0.08em] uppercase';
+const cardArrow = 'transition-transform duration-300 ease-out group-hover/card:translate-x-1.25';
+const heroImg = 'absolute inset-0 -z-2 size-full max-w-none object-cover object-[center_62%]';
+---
+
+<BaseLayout>
+  <!-- HERO -->
+  <section class="relative isolate flex min-h-[min(88svh,820px)] items-center overflow-hidden bg-noir text-blanc">
+    <Picture
+      src={cover}
+      alt=""
+      formats={['avif', 'webp']}
+      layout="full-width"
+      widths={[640, 960, 1280, 1433]}
+      sizes="100vw"
+      priority
+      class:list={[heroImg, 'motion-safe:animate-ken-burns']}
+      pictureAttributes={{ class: `${heroImg} parallax` }}
+    />
+    <div class="absolute inset-0 -z-1 bg-noir/60" aria-hidden="true"></div>
+
+    <div class="container py-[clamp(72px,10vw,120px)]">
+      <div class="flex max-w-190 flex-col items-start">
+        <p class="eyebrow motion-safe:animate-rise">{site.address.city} · {site.address.region}</p>
+        <div class="filet bg-ocre motion-safe:animate-[grow-x_0.9s_0.2s_var(--ease-out)_both]" aria-hidden="true"></div>
+        <h1 class="title-xl motion-safe:animate-[rise_0.8s_0.08s_var(--ease-out)_both]">Leader du bokit non gras.</h1>
+        <p class="script mt-4 motion-safe:animate-[rise_0.8s_0.22s_var(--ease-out)_both]">{site.motto}</p>
+        <p class="lead mt-5 mb-8 motion-safe:animate-[rise_0.8s_0.32s_var(--ease-out)_both]">
+          Bokits non gras, agoulous, paninis et crêpes, préparés sur place avec des produits locaux, frais et de
+          saison. Viens goûter, tu vas adorer.
+        </p>
+        <div class="flex flex-wrap gap-3 motion-safe:animate-[rise_0.8s_0.42s_var(--ease-out)_both]">
+          <a href="/menu" class="btn btn-rouge">
+            Voir le menu
+            <Icon name="arrow" size={18} />
+          </a>
+          <a href={site.phones[0].href} class="btn btn-outline-blanc">
+            <Icon name="phone" size={18} />
+            {site.phones[0].label}
+          </a>
+        </div>
+        <p class="pill mt-7 motion-safe:animate-[rise_0.8s_0.52s_var(--ease-out)_both]">
+          <Icon name="clock" size={16} />
+          {site.hours.daysShort} · {site.hours.label}
+        </p>
+      </div>
+    </div>
+
+    <a
+      href="#specialites"
+      class="absolute bottom-6 left-1/2 -ml-3.5 h-11.5 w-7 rounded-full border-2 border-blanc opacity-80 max-[720px]:hidden [@media(max-height:640px)]:hidden"
+      aria-label="Découvrir nos spécialités"
+    >
+      <span class="absolute top-2 left-1/2 -ml-0.5 h-2.25 w-1 rounded-xs bg-ocre motion-safe:animate-cue"></span>
+    </a>
+  </section>
+
+  <!-- BANDEAU PRODUITS (défilement continu) -->
+  <div class="group/marquee overflow-hidden border-y-2 border-noir bg-ocre text-noir" aria-label="Nos produits">
+    <div
+      class="flex w-max motion-safe:animate-marquee motion-safe:group-hover/marquee:[animation-play-state:paused]"
+    >
+      {
+        [0, 1].map((n) => (
+          <ul class="flex" aria-hidden={n === 1 ? 'true' : undefined}>
+            {['Bokits non gras', 'Agoulous', 'Paninis', 'Crêpes salées', 'Crêpes sucrées', 'Desserts maison', 'Soupe du samedi'].map(
+              (label) => (
+                <li class="flex items-center gap-7 py-4 pl-7 font-title text-[21px] font-semibold tracking-[0.04em] whitespace-nowrap uppercase after:size-2.25 after:rounded-full after:bg-rouge">
+                  {label}
+                </li>
+              ),
+            )}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- SPÉCIALITÉS -->
+  <section id="specialites" class="py-section">
+    <div class="container">
+      <div class={sectionHead}>
+        <div class="reveal">
+          <p class="eyebrow text-rouge">Nos incontournables</p>
+          <div class="filet reveal-filet bg-ocre" aria-hidden="true"></div>
+          <h2 class="title-lg">Deux spécialités, une seule signature.</h2>
+        </div>
+        <p class="reveal max-w-105 text-muted" style="--i:1">
+          Recettes antillaises, pain préparé sur place et garnitures généreuses. Le bokit, chez nous, se mange sans
+          gras.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] gap-8">
+        <a href="/nos-specialites#bokit" class={card}>
+          <div class="aspect-4/3 overflow-hidden">
+            <Picture
+              src={cover}
+              alt="Deux bokits garnis de viande, salade, tomate et oignon rouge"
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960]}
+              sizes="(min-width: 900px) 560px, 100vw"
+              class:list={[cardImg, '[view-transition-name:bokit-photo]']}
+            />
+          </div>
+          <div class="flex flex-1 flex-col gap-3.5 p-7">
+            <h3 class="title-md text-[32px] font-bold text-rouge">Bokits non gras</h3>
+            <p class="text-muted">
+              Croustillant dehors, moelleux dedans, et pas gras. Garni à la minute : jambon, saucisse, rouscaille,
+              agneau, chatrou ou végétarien.
+            </p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-1.5">
+              <span class={cardPrice}>{formatRange(bokits.range!)}</span>
+              <span class={cardMore}>Découvrir <Icon name="arrow" size={18} class={cardArrow} /></span>
+            </div>
+          </div>
+        </a>
+
+        <a href="/nos-specialites#agoulou" class={card} style="--i:1">
+          <div class="aspect-4/3 overflow-hidden">
+            <Picture
+              src={photos.agoulou.src}
+              alt={photos.agoulou.alt}
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960]}
+              sizes="(min-width: 900px) 560px, 100vw"
+              class:list={[cardImg, 'object-[center_40%] [view-transition-name:agoulou-photo]']}
+            />
+          </div>
+          <div class="flex flex-1 flex-col gap-3.5 p-7">
+            <h3 class="title-md text-[32px] font-bold text-rouge">Agoulous</h3>
+            <p class="text-muted">
+              La spécialité des Antilles. Pain doré, viande juteuse, fromage fondant et recettes de caractère, du
+              Simply au Must.
+            </p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-1.5">
+              <span class={cardPrice}>{formatRange(agoulous.range!)}</span>
+              <span class={cardMore}>Découvrir <Icon name="arrow" size={18} class={cardArrow} /></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- APERÇU DU MENU -->
+  <section class="bg-ocre py-section">
+    <div class="container">
+      <div class={sectionHead}>
+        <div class="reveal">
+          <p class="eyebrow">À la carte</p>
+          <div class="filet reveal-filet bg-noir" aria-hidden="true"></div>
+          <h2 class="title-lg">Le menu.</h2>
+        </div>
+        <p class="reveal max-w-105" style="--i:1">Tout est préparé sur place. Les prix varient selon la garniture.</p>
+      </div>
+
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-x-18 gap-y-11">
+        {teaser.map((category, i) => <MenuCategory category={category} variant="compact" index={i} />)}
+      </div>
+
+      <ul class="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,220px),1fr))] gap-4.5">
+        {
+          gourmandises.map((item, i) => (
+            <li class="reveal-zoom" style={`--i:${i}`}>
+              <a
+                href={item.href}
+                class="group/treat relative block aspect-square overflow-hidden border-2 border-noir text-blanc"
+              >
+                <Picture
+                  src={item.photo.src}
+                  alt={item.photo.alt}
+                  formats={['avif', 'webp']}
+                  widths={[320, 480, 640]}
+                  sizes="(min-width: 1000px) 280px, (min-width: 600px) 50vw, 100vw"
+                  class="size-full object-cover transition-transform duration-800 ease-out group-hover/treat:scale-108"
+                />
+                <span class="absolute bottom-0 left-0 bg-noir px-4 py-2.5 font-title text-[20px] font-semibold tracking-[0.03em] uppercase transition-colors duration-300 group-hover/treat:bg-rouge">
+                  {item.label}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div
+        class="reveal mx-auto mt-18 mb-12 flex max-w-160 flex-col items-center gap-2.5 border-y-2 border-noir px-2 py-9 text-center"
+      >
+        <p class="title-md">{site.name}</p>
+        <p class="script">{site.motto}</p>
+        <p>
+          Ici, tout est préparé sur place avec des produits locaux, frais et de saison. Notre bokit est cuit pour
+          rester léger. Et le samedi, une soupe maison t'attend.
+        </p>
+      </div>
+
+      <div class="reveal flex justify-center">
+        <a href="/menu" class="btn btn-rouge">
+          Voir tout le menu
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LE LIEU -->
+  <section class="py-section">
+    <div class="container">
+      <div class={sectionHead}>
+        <div class="reveal">
+          <p class="eyebrow text-rouge">Le lieu</p>
+          <div class="filet reveal-filet bg-ocre" aria-hidden="true"></div>
+          <h2 class="title-lg">Viens t'installer chez nous.</h2>
+        </div>
+        <p class="reveal max-w-105 text-muted" style="--i:1">
+          Murs orange, banquettes rouges, tables en teck et déco naturelle. Une salle lumineuse pour manger sur place,
+          seul, en famille ou entre amis.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,230px),1fr))] gap-5">
+        {
+          lieu.map((photo, i) => (
+            <figure class="group/photo reveal-zoom flex flex-col gap-2.5" style={`--i:${i}`}>
+              <div class="aspect-3/4 overflow-hidden">
+                <Picture
+                  src={photo.src}
+                  alt={photo.alt}
+                  formats={['avif', 'webp']}
+                  widths={[320, 480, 700]}
+                  sizes="(min-width: 1000px) 280px, (min-width: 560px) 50vw, 100vw"
+                  class="size-full object-cover transition-transform duration-800 ease-out group-hover/photo:scale-105"
+                />
+              </div>
+              <figcaption class="text-[14px] text-muted">{photo.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      <!-- L'équipe et la vente à emporter -->
+      <div class="mt-18 grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-[clamp(32px,5vw,64px)]">
+        <figure class="group/photo reveal-zoom relative aspect-4/5 overflow-hidden">
+          <Picture
+            src={comptoir.src}
+            alt={comptoir.alt}
+            formats={['avif', 'webp']}
+            widths={[420, 640, 880]}
+            sizes="(min-width: 960px) 560px, 100vw"
+            class="size-full object-cover transition-transform duration-800 ease-out group-hover/photo:scale-105"
+          />
+          <figcaption class="absolute bottom-4 left-4 rounded-full bg-ocre px-4 py-2.5 text-[13px] font-extrabold tracking-widest text-noir uppercase">
+            L'équipe au comptoir
+          </figcaption>
+        </figure>
+
+        <div class="flex flex-col gap-4">
+          <p class="eyebrow reveal text-rouge">Sur place ou à emporter</p>
+          <div class="filet reveal-filet bg-ocre" aria-hidden="true"></div>
+          <h3 class="title-lg reveal">Ta commande, prête à partir.</h3>
+          <p class="script reveal">{site.motto}</p>
+          <p class="reveal text-muted">
+            Au comptoir, l'équipe prépare tout à la minute. Pour emporter, ta commande part dans notre sac isotherme,
+            avec les gobelets aux couleurs de la maison.
+          </p>
+          <ul class="mt-2 grid grid-cols-2 gap-4">
+            {
+              emporter.map((photo, i) => (
+                <li class="group/photo reveal-zoom flex flex-col gap-2" style={`--i:${i + 1}`}>
+                  <div class="aspect-square overflow-hidden border-2 border-noir">
+                    <Picture
+                      src={photo.src}
+                      alt={photo.alt}
+                      formats={['avif', 'webp']}
+                      widths={[280, 420, 640]}
+                      sizes="(min-width: 960px) 260px, 50vw"
+                      class="size-full object-cover transition-transform duration-800 ease-out group-hover/photo:scale-106"
+                    />
+                  </div>
+                  <span class="text-[14px] text-muted">{photo.caption}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <div class="reveal mt-2 flex flex-wrap gap-3">
+            <a href={site.phones[0].href} class="btn btn-rouge">
+              <Icon name="phone" size={18} />
+              Commander à emporter
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {
+        site.reviews.length > 0 && (
+          <div class="mt-18 grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-8">
+            {site.reviews.map((review, i) => (
+              <figure class="reveal flex flex-col gap-2.5 border-t-2 border-ocre pt-5.5" style={`--i:${i}`}>
+                <blockquote class="text-[20px] leading-[1.45] font-bold">« {review.quote} »</blockquote>
+                <figcaption class="text-[14px] text-muted">
+                  — {review.author}
+                  {review.place && `, ${review.place}`}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- INFOS -->
+  <section class="bg-blanc py-section" id="infos">
+    <div class="container">
+      <InfosPratiques />
+    </div>
+  </section>
+</BaseLayout>
