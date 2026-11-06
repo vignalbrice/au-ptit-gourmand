@@ -64,7 +64,6 @@ export const menu: MenuCategory[] = [
     title: 'Paninis',
     range: [4, 10],
     items: [
-      { name: 'Nature' },
       { name: 'Fromage' },
       { name: 'Jambon fromage' },
       { name: 'Poulet' },
@@ -79,7 +78,7 @@ export const menu: MenuCategory[] = [
     id: 'complet',
     title: 'Option complet',
     range: [7, 13],
-    note: 'Sur bokit ou panini.',
+    note: 'Sur bokit uniquement.',
     items: [
       { name: 'Saucisse' },
       { name: 'Poulet' },
