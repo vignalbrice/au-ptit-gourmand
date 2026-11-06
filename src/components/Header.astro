@@ -100,10 +100,14 @@ const phone = site.phones[0];
       </ul>
     </nav>
     <div class="flex flex-col items-start gap-4.5">
-      <a href={phone.href} class="btn btn-blanc">
-        <Icon name="phone" size={18} />
-        Appeler · {phone.label}
-      </a>
+      {
+        site.phones.map((p) => (
+          <a href={p.href} class="btn btn-blanc">
+            <Icon name="phone" size={18} />
+            Appeler · {p.label}
+          </a>
+        ))
+      }
       <p class="script">{site.motto}</p>
     </div>
   </div>

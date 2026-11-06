@@ -23,10 +23,14 @@ const {
       <p class="lead mt-3">{text}</p>
     </div>
     <div class="flex flex-wrap gap-3">
-      <a href={site.phones[0].href} class="btn btn-blanc">
-        <Icon name="phone" size={18} />
-        {site.phones[0].label}
-      </a>
+      {
+        site.phones.map((p) => (
+          <a href={p.href} class="btn btn-blanc">
+            <Icon name="phone" size={18} />
+            {p.label}
+          </a>
+        ))
+      }
       <a href="/menu" class="btn btn-outline-blanc">
         Voir le menu
         <Icon name="arrow" size={18} />

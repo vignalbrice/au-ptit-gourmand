@@ -8,7 +8,7 @@ import type { ImageMetadata } from 'astro';
 import bokitCouverture from '@/assets/images/bokit-couverture.jpg';
 import bokitsDores from '@/assets/images/bokits-dores.jpg';
 import agoulou from '@/assets/images/agoulou.jpg';
-import paniniGrille from '@/assets/images/panini-grille.jpg';
+import panini from '@/assets/images/panini.jpg';
 import crepeSalee from '@/assets/images/crepe-salee.jpg';
 import crepeSucree from '@/assets/images/crepe-sucree.jpg';
 import fondantChocolat from '@/assets/images/fondant-chocolat.jpg';
@@ -35,8 +35,8 @@ export interface Photo {
 export const photos = {
   hero: { src: bokitCouverture, alt: 'Deux bokits garnis de viande, salade, tomate et oignon rouge sur une planche en bois' },
   bokits: { src: bokitsDores, alt: 'Bokits dorés garnis, posés sur une planche en bois' },
-  agoulou: { src: agoulou, alt: 'Agoulou garni de tomate et de salade dans un pain moelleux', position: 'center 40%' },
-  paninis: { src: paniniGrille, alt: 'Paninis grillés coupés en triangles, garnis de viande, oignon rouge, tomate et salade' },
+  agoulou: { src: agoulou, alt: 'Agoulous grillés coupés en triangles, garnis de viande hachée, oignon rouge, tomate et salade' },
+  paninis: { src: panini, alt: 'Panini doré garni de tomate et de salade', position: 'center 40%' },
   crepesSalees: { src: crepeSalee, alt: 'Crêpe salée jambon fromage coupée, servie avec une salade' },
   crepesSucrees: { src: crepeSucree, alt: 'Crêpe sucrée roulée, nappage chocolat, chantilly et amandes effilées' },
   desserts: { src: fondantChocolat, alt: 'Fondant au chocolat au cœur coulant, saupoudré de sucre glace' },

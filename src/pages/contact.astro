@@ -20,10 +20,14 @@ const link = 'font-extrabold text-rouge underline underline-offset-3';
 >
   <PageHero eyebrow="Contact" title="Passe nous voir." lead="Sur place ou à emporter. Appelle-nous pour commander, ta commande est préparée à la minute.">
     <div class="mt-7 flex flex-wrap gap-3 motion-safe:animate-[rise_0.7s_0.25s_var(--ease-out)_both]">
-      <a href={site.phones[0].href} class="btn btn-blanc">
-        <Icon name="phone" size={18} />
-        {site.phones[0].label}
-      </a>
+      {
+        site.phones.map((p) => (
+          <a href={p.href} class="btn btn-blanc">
+            <Icon name="phone" size={18} />
+            {p.label}
+          </a>
+        ))
+      }
       <a href={site.maps.directions} class="btn btn-outline-blanc" target="_blank" rel="noopener">
         Itinéraire
         <Icon name="arrow" size={18} />

@@ -63,10 +63,14 @@ const heroImg = 'absolute inset-0 -z-2 size-full max-w-none object-cover object-
             Voir le menu
             <Icon name="arrow" size={18} />
           </a>
-          <a href={site.phones[0].href} class="btn btn-outline-blanc">
-            <Icon name="phone" size={18} />
-            {site.phones[0].label}
-          </a>
+          {
+            site.phones.map((p) => (
+              <a href={p.href} class="btn btn-outline-blanc">
+                <Icon name="phone" size={18} />
+                {p.label}
+              </a>
+            ))
+          }
         </div>
         <p class="pill mt-7 motion-safe:animate-[rise_0.8s_0.52s_var(--ease-out)_both]">
           <Icon name="clock" size={16} />
@@ -153,7 +157,7 @@ const heroImg = 'absolute inset-0 -z-2 size-full max-w-none object-cover object-
               formats={['avif', 'webp']}
               widths={[480, 720, 960]}
               sizes="(min-width: 900px) 560px, 100vw"
-              class:list={[cardImg, 'object-[center_40%] [view-transition-name:agoulou-photo]']}
+              class:list={[cardImg, '[view-transition-name:agoulou-photo]']}
             />
           </div>
           <div class="flex flex-1 flex-col gap-3.5 p-7">

@@ -2,8 +2,9 @@
  * La carte du restaurant.
  * - `price` : prix exact d'un plat (en euros, TTC).
  * - `range` : fourchette de prix d'une catégorie quand le prix dépend de la garniture.
- * Les crêpes et les desserts reprennent les prix du dépliant ; les autres catégories
- * gardent les fourchettes de l'ancien site, à remplacer par les prix exacts.
+ * Les crêpes et les desserts reprennent les prix du dépliant. Les bokits, agoulous,
+ * paninis et l'option complet affichent les fourchettes données par le restaurant,
+ * à remplacer par les prix exacts ; celle des soupes vient de l'ancien site.
  */
 
 export interface MenuItem {
@@ -23,7 +24,7 @@ export const menu: MenuCategory[] = [
   {
     id: 'bokits',
     title: 'Bokits',
-    range: [4, 9],
+    range: [4, 10],
     note: 'Non gras, garnis à la minute.',
     items: [
       { name: 'Végétarien' },
@@ -45,7 +46,7 @@ export const menu: MenuCategory[] = [
   {
     id: 'agoulous',
     title: 'Agoulous',
-    range: [4.5, 9.5],
+    range: [5.5, 13],
     items: [
       { name: 'Le Simply' },
       { name: 'Le Ham Cheese' },
@@ -61,7 +62,7 @@ export const menu: MenuCategory[] = [
   {
     id: 'paninis',
     title: 'Paninis',
-    range: [4.5, 9.5],
+    range: [4, 10],
     items: [
       { name: 'Nature' },
       { name: 'Fromage' },
@@ -77,7 +78,7 @@ export const menu: MenuCategory[] = [
   {
     id: 'complet',
     title: 'Option complet',
-    range: [7, 9],
+    range: [7, 13],
     note: 'Sur bokit ou panini.',
     items: [
       { name: 'Saucisse' },
@@ -86,6 +87,11 @@ export const menu: MenuCategory[] = [
       { name: 'Rouscaille' },
       { name: 'Thon' },
       { name: 'Bœuf' },
+      { name: 'Agneau' },
+      { name: 'Lardons' },
+      { name: 'Morue' },
+      { name: 'Lambi' },
+      { name: 'Chatrou boucané' },
     ],
   },
   {
