@@ -69,6 +69,7 @@ export const nav = [
   { href: '/', label: 'Accueil' },
   { href: '/menu', label: 'Menu' },
   { href: '/nos-specialites', label: 'Nos spécialités' },
+  { href: '/traiteur', label: 'Traiteur' },
   { href: '/qui-sommes-nous', label: 'Qui sommes-nous' },
   { href: '/contact', label: 'Contact' },
 ] as const;

@@ -67,7 +67,7 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/mentions-legales'),
+      filter: (page) => !page.includes('/mentions-legales') && !page.includes('/traiteur-merci'),
     }),
   ],
 });

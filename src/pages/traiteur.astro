@@ -1,0 +1,119 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Icon from '@/components/Icon.astro';
+import { site } from '@/data/site';
+
+/**
+ * Formulaire envoyé avec Netlify Forms : Netlify repère le formulaire au déploiement
+ * (attribut data-netlify) et range les demandes dans l'onglet « Forms » du site.
+ * Pour recevoir chaque demande par e-mail : Netlify > Forms > Form notifications.
+ */
+const eventTypes = ['Anniversaire', 'Mariage', 'Baptême ou communion', "Repas d'entreprise", 'Fête de famille', 'Autre'];
+
+// Classes partagées
+const field = 'flex flex-col gap-2';
+const label = 'text-[15px] font-extrabold';
+const optional = 'font-normal text-muted';
+const control =
+  'w-full rounded-none border-2 border-muted/40 bg-blanc px-4 text-[17px] text-noir transition-colors duration-200 placeholder:text-muted/70 hover:border-muted focus:border-rouge focus:outline-none user-invalid:border-rouge';
+const input = `${control} h-14`;
+const link = 'font-extrabold text-rouge underline underline-offset-3';
+---
+
+<BaseLayout
+  title="Traiteur : bokits, agoulous et plats pour tes événements"
+  description={`${site.name}, traiteur à ${site.address.city} : anniversaires, baptêmes, mariages et repas d'entreprise. Envoie ta demande, on te recontacte avec une proposition sur mesure.`}
+  crumb="Traiteur"
+>
+  <PageHero
+    eyebrow="Traiteur"
+    title="On régale tes invités."
+    lead="Anniversaire, baptême, mariage ou repas d'entreprise : dis-nous ce que tu prépares, on te recontacte avec une proposition sur mesure, faite maison."
+  />
+
+  <section class="py-section">
+    <div class="container flex flex-wrap items-start gap-5">
+      <form
+        name="traiteur"
+        method="POST"
+        action="/traiteur-merci"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="reveal flex min-w-0 flex-[999_1_520px] flex-col gap-5.5 border-t-4 border-ocre bg-blanc px-[clamp(20px,4vw,40px)] pt-8 pb-9"
+      >
+        <input type="hidden" name="form-name" value="traiteur" />
+        <p class="hidden">
+          <label>Ne remplis pas ce champ : <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <h2 class="title-md">Ta demande</h2>
+
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,230px),1fr))] gap-5">
+          <div class={field}>
+            <label for="nom" class={label}>Nom et prénom</label>
+            <input id="nom" name="nom" type="text" autocomplete="name" required class={input} />
+          </div>
+          <div class={field}>
+            <label for="telephone" class={label}>Téléphone</label>
+            <input id="telephone" name="telephone" type="tel" autocomplete="tel" required class={input} />
+          </div>
+        </div>
+
+        <div class={field}>
+          <label for="email" class={label}>E-mail <span class={optional}>(facultatif)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" class={input} />
+        </div>
+
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,180px),1fr))] gap-5">
+          <div class={field}>
+            <label for="evenement" class={label}>Événement <span class={optional}>(facultatif)</span></label>
+            <select id="evenement" name="evenement" class={input}>
+              <option value="">Choisir…</option>
+              {eventTypes.map((type) => <option>{type}</option>)}
+            </select>
+          </div>
+          <div class={field}>
+            <label for="date" class={label}>Date <span class={optional}>(facultatif)</span></label>
+            <input id="date" name="date" type="date" class={input} />
+          </div>
+          <div class={field}>
+            <label for="personnes" class={label}>Personnes <span class={optional}>(facultatif)</span></label>
+            <input id="personnes" name="personnes" type="number" min="1" inputmode="numeric" class={input} />
+          </div>
+        </div>
+
+        <div class={field}>
+          <label for="message" class={label}>Ton message</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            required
+            placeholder="Ce que tu aimerais servir, le lieu, l'horaire…"
+            class:list={[control, 'resize-y py-3']}></textarea>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3.5">
+          <button type="submit" class="btn btn-rouge">
+            Envoyer ma demande
+            <Icon name="arrow" size={18} />
+          </button>
+          <p class="text-[15px] text-muted">
+            Tes coordonnées servent uniquement à te répondre. <a href="/mentions-legales" class="underline underline-offset-3">En savoir plus</a>
+          </p>
+        </div>
+      </form>
+
+      <aside class="reveal flex flex-[1_1_280px] flex-col gap-3 border-t-4 border-ocre bg-blanc px-6.5 pt-7 pb-7.5" style="--i:1">
+        <Icon name="phone" size={28} class="text-rouge" />
+        <h2 class="title-md">Tu préfères appeler ?</h2>
+        <p>On en parle de vive voix, {site.hours.daysLabel.toLowerCase()}, {site.hours.label}.</p>
+        <ul>
+          {site.phones.map((p) => (<li><a href={p.href} class="font-title text-[26px] font-bold text-rouge">{p.label}</a></li>))}
+        </ul>
+        <a href={`mailto:${site.email}`} class:list={[link, 'wrap-anywhere']}>{site.email}</a>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

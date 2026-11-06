@@ -22,6 +22,7 @@ npm run preview   # sert la version de production en local
 | `/`                | `src/pages/index.astro`           |
 | `/menu`            | `src/pages/menu.astro`            |
 | `/nos-specialites` | `src/pages/nos-specialites.astro` |
+| `/traiteur`        | `src/pages/traiteur.astro`        |
 | `/contact`         | `src/pages/contact.astro`         |
 | `/mentions-legales`| `src/pages/mentions-legales.astro`|
 
@@ -46,6 +47,8 @@ Les adresses sont les mêmes que sur l'ancien site, pour conserver le référenc
 - [x] Informations légales de la société (SAS, RCS, SIRET, TVA) dans `src/pages/mentions-legales.astro`
 - [ ] Directeur de la publication et hébergeur dans `src/pages/mentions-legales.astro`
 - [ ] Vraies photos des plats (bokit, agoulou) prises sur place
+- [ ] Formulaire traiteur : activer la détection des formulaires dans Netlify (Forms) et ajouter une notification
+      e-mail pour recevoir chaque demande
 - [x] Confirmer l'adresse : 32 avenue Paul-Lacavé (siège social au registre du commerce depuis avril 2025)
 
 ## Performances et SEO

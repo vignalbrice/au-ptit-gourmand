@@ -90,7 +90,7 @@ const phone = site.phones[0];
               <a
                 href={item.href}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class="block py-1.5 font-title text-[clamp(40px,11vw,64px)] leading-[1.05] font-bold tracking-[0.02em] text-blanc uppercase aria-[current=page]:text-ocre"
+                class="block py-1.5 font-title text-[clamp(40px,11vw,64px)] leading-[1.05] [@media(max-height:720px)]:py-1 [@media(max-height:720px)]:text-[clamp(30px,8vw,44px)] font-bold tracking-[0.02em] text-blanc uppercase aria-[current=page]:text-ocre"
               >
                 {item.label}.
               </a>
